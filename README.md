@@ -1,2 +1,2 @@
 # AStar
-Implementations of the A* pathfinding algorithm
+Implementation of the A* pathfinding algorithm in Java.
