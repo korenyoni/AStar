@@ -3,7 +3,9 @@ Implementation of the A* pathfinding algorithm in Java.
 Shown in a GUI application. The program displays the shortest
 path from Point A to point B, going around any non-traversable (black) spaces.
 
-## Usage
+Also displays heuristic distance from point B at any space on the grid observed by the algorithm.
+
+# Usage
 
 ###Compiling and Running:
 1. Compile .java files in the JButtonAStar directory
