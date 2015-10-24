@@ -205,7 +205,7 @@ public class ButtonGrid
 		updateH(root);
 		openSet.add(root);
 
-		while (!pathFound)
+		while (!pathFound && !openSet.isEmpty())
 		{
 			Collections.sort(openSet);
 				// sort the neighbors by their fCost
@@ -230,6 +230,10 @@ public class ButtonGrid
 				calcSurroundings(currentNode);
 			}
 		}
+        if (!pathFound)
+        {
+             System.out.println("Not found");
+        }
 	}
 	public static void main(String[] args)
 	{
