@@ -21,67 +21,6 @@ import java.util.Set;
 // X is width
 public class ButtonGrid
 {
-	@SuppressWarnings("serial")
-	static class Node extends JButton implements Comparable<Node>
-	{
-		/*Super Constructors*/
-		// delegate to the superclass default constructor
-		Node(int x, int y) {
-			super();
-			blocked = false; // by default you can traverse the node
-			this.x = x;
-			this.y = y;
-			this.addActionListener(new ActionListener(){
-				@Override
-				public void actionPerformed(ActionEvent e) {
-				 if ((e.getModifiers() & InputEvent.SHIFT_MASK) != 0) {
-					    // Shift is down...
-					 if (blocked)
-						 // if the tile was already blocked
-					 {
-						 // unblock it upon click
-						 blocked = false;
-						 setBackground(Color.white);
-					 }
-					 else
-					 {
-						 // if it was not blocked, make it blocked upon click
-						 blocked = true;
-						 setBackground(Color.BLACK);
-					 }
-					}
-				}
-			});
-		}
-		// delegate to the superclass String constructor
-		Node(int x, int y, String s) {
-			super(s); // this node can be traversed by default
-			blocked = false;
-			this.x = x;
-			this.y = y;
-		}
-		/*Fields for A-Star*/
-		private int x;
-		private int y;
-		private boolean blocked; // is this node blocked from being traversed?
-		private int gCost; // cost from start node (A) to this node
-		private int hCost; // (heuristic) cost from node to destination (B)
-		private Node parent; // the parent node
-		@Override
-		public String toString()
-		{
-			return new String(String.format("(%d,%d)", x,y));
-		}
-		/*simply return the fCost*/
-		public int fCost()
-		{
-			return gCost + hCost;
-		}
-		@Override
-		public int compareTo(Node o) {
-			return this.fCost() - o.fCost();
-		}
-	}
 	private static final int BUTTON_SIZE = 60; // dimensions of each button
 		// movement cost of moving diagonally
 		// i.e. (the square root of 2) * 10
@@ -133,7 +72,7 @@ public class ButtonGrid
 	{
 		int xDiff = parent.x - child.x;
 		int yDiff = parent.y - child.y;
-		
+
 		if (xDiff == 0 || yDiff == 0)
 		{
 			return false;
@@ -143,7 +82,7 @@ public class ButtonGrid
 		// if movement is diagonal, these are the perpendicular nodes
 		Node nodeA = grid[child.x][child.y + yDiff];
 		Node nodeB = grid[child.x + xDiff][child.y];
-		
+
 		return nodeA.blocked || nodeB.blocked;
 	}
 	/*set point A*/
@@ -167,7 +106,7 @@ public class ButtonGrid
 		// we just set to be the destination
 	}
 	/*set the heuristic of the node*/
-	// that is the estimated movement cost from that node to the 
+	// that is the estimated movement cost from that node to the
 	// destination node (point B)
 	private void updateH(Node node)
 	{
@@ -185,18 +124,18 @@ public class ButtonGrid
 		List<Node> neighbors = new ArrayList<Node>();
 		int nodeX = node.x; // the specified node's x coordinate
 		int nodeY = node.y; // the specified node's y coordinate
-		
+
 		for (int x = -1; x <= 1; x++)
 		{
 			for (int y = -1; y <= 1; y++)
 			{
 				boolean sameNode = x == 0 && y == 0;
-					// the node will not be the same as the 
+					// the node will not be the same as the
 					// specified node
 				boolean withinGrid = nodeX + x >= 0 && nodeX + x < width
 							&& nodeY + y >= 0 && nodeY + y < length;
 					// the node will be within the grid
-							
+
 				if (!sameNode && withinGrid)
 				{
 					neighbors.add(grid[nodeX + x][nodeY + y]);
@@ -218,7 +157,7 @@ public class ButtonGrid
 			//neighbor.setBackground(Color.GRAY);
 			if (!neighbor.blocked && !closedSet.contains(neighbor)
 					&& !cornerBlocked(node, neighbor))
-				// if the neighbor is traversable and it is not in the 
+				// if the neighbor is traversable and it is not in the
 				// closed set
 			{
 				int distanceToNeighbor = node.gCost + getDistance(neighbor, node);
@@ -265,7 +204,7 @@ public class ButtonGrid
 		root.gCost = 0;
 		updateH(root);
 		openSet.add(root);
-		
+
 		while (!pathFound)
 		{
 			Collections.sort(openSet);
@@ -296,7 +235,7 @@ public class ButtonGrid
 	{
 		/*ADD START POINT AND END POINT*/
 		int gridSize = 10;
-		ButtonGrid myGrid = new ButtonGrid(gridSize,gridSize);
+		final ButtonGrid myGrid = new ButtonGrid(gridSize,gridSize);
 		myGrid.setPointA(0, 0);
 		myGrid.setPointB(9, 9);
 		// start the a* algorithm when the user clicks the A tile
